@@ -1,6 +1,8 @@
 package test.server.types;
 import java.util.List;
 
+import test.server.types.datasrc.TransactionsListDS;
+
  
 
 public class Account {
@@ -9,7 +11,6 @@ public class Account {
 	private String acctNum;
 	private String custName;
 	private String acctCurrency;
-	private List<Transaction> acctTransactions;
 	private long balance;
 	
 	public Account(String id, String number, String customer, String currency, long startbalance) {
@@ -46,8 +47,7 @@ public class Account {
 	}
 	public List<Transaction> getAcctTransactions() {
 		
-		//DO SOMETHING HERE
-		return acctTransactions;
+		return TransactionsListDS.getTransactionsForAccount(this.acctId);
 	}
 	
 	public long getBalance() {
@@ -55,6 +55,11 @@ public class Account {
 	}
 	public void setBalance(long balance) {
 		this.balance = balance;
+	}
+	
+	
+	public String toString() {
+		return "[AccountID " +  acctId + " AccountNumber " + acctNum + " Name " + custName + " Currency="+ acctCurrency + " Balance="+ balance+"]";
 	}
 }
 

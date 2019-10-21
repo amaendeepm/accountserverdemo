@@ -9,6 +9,7 @@ import test.server.types.Account;
 import test.server.types.Transaction;
 import test.server.types.Transaction.TxnStatus;
 import test.server.types.datasrc.AccountsDS;
+import test.server.types.datasrc.TransactionsListDS;
 
 public class TransactionProcessor {
 
@@ -18,17 +19,17 @@ public class TransactionProcessor {
 	
 	protected synchronized String postTransaction(String fromAccount, String toAccount, long amount) {
 		
-		BlockingQueue<Transaction> txnLifeQueue = new LinkedBlockingDeque<>(2);
+		BlockingQueue<Transaction> txnLifeQueue = new LinkedBlockingDeque<>(10000);
 		ExecutorService executor = Executors.newFixedThreadPool(2);
 		Transaction txn = new Transaction(fromAccount,toAccount,amount);
 		
 		Runnable createTxn = () -> {
 			try {
-				while (true) {
+				
 					txnLifeQueue.put(txn);
 					System.out.println("Posted-Transaction " + txn);
 					Thread.sleep(1000);
-				}
+				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -48,13 +49,10 @@ public class TransactionProcessor {
 					Account toAcctObj = AccountsDS.findAccount(toAccount);
 					
 					//Check balance in fromAccount
-					if (fromAcctObj.getBalance() > amount) {
-						//Post updatedBalance in toAccount
+					if (fromAcctObj!=null && toAcctObj!=null && fromAcctObj.getId()!= toAcctObj.getId() && fromAcctObj.getBalance() > amount) {
 						
 						//TXN START
-						toAcctObj.setBalance(toAcctObj.getBalance()+incTxn.getTxnAmount());
-						fromAcctObj.setBalance(fromAcctObj.getBalance() - incTxn.getTxnAmount());
-						incTxn.setTxnStatus(TxnStatus.CONFIRMED);
+						TransactionsListDS.postTransaction(incTxn);
 						//TXN END
 						
 					} else {

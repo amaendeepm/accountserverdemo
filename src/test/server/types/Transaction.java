@@ -13,6 +13,7 @@ public class Transaction {
 	private final String toAccountId;
 	private TxnStatus txnStatus;
 	private final long txnAmount;
+	private TxnType txnType;
 
 	public enum TxnStatus {
 		INIT,
@@ -88,6 +89,31 @@ public class Transaction {
 
 	public long getTxnAmount() {
 		return txnAmount;
+	}
+	
+	//Copy Constructor
+	public Transaction(Transaction another) {
+		this.id = another.id;
+		this.initTime = another.initTime;
+		this.confTime = another.confTime;
+		this.lastUpdatedTime = another.lastUpdatedTime;
+		this.fromAccountId = another.fromAccountId;
+		this.toAccountId = another.toAccountId;
+		this.txnStatus = another.txnStatus;
+		this.txnAmount = another.txnAmount;   
+	  }
+
+	public TxnType getTxnType() {
+		return txnType;
+	}
+
+	public void setTxnType(TxnType txnType) {
+		this.txnType = txnType;
+	}
+	
+	
+	public String toString() {
+		return "\n\r[Transaction"+ "id="+id+ " fromAcct="+ fromAccountId + " toAccountId="+toAccountId+ " Amount= "+txnAmount + " Type="+ txnType+ " Status="+txnStatus+"]";
 	}
 
 }
