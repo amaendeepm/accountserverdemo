@@ -48,7 +48,7 @@ public class Account {
 	}
 	public List<Transaction> getAcctTransactions() {
 		
-		return TransactionsListDS.getTransactionsForAccount(this.acctId);
+		return TransactionsListDS.getInstance().getTransactionsForAccount(this.acctId);
 	}
 	
 	public double getBalance() {

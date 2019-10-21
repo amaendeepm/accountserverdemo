@@ -1,13 +1,12 @@
 package test.server.types.datasrc;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.ListIterator;
 
 import test.server.types.Account;
 import test.server.types.Transaction;
-import test.server.types.Transaction.TxnStatus;
+
 
 public class TransactionsListDS {
 
@@ -16,6 +15,7 @@ public class TransactionsListDS {
 	private static List<Transaction> listTxn;
 
 	private TransactionsListDS() {}
+
 
 	static{
 		txnListDS = new TransactionsListDS();
@@ -28,9 +28,10 @@ public class TransactionsListDS {
 
 	private void init() {
 		listTxn = new ArrayList<Transaction>();
+
 	}
 
-	public static List<Transaction> getTransactionsForAccount(long account) {
+	public synchronized List<Transaction> getTransactionsForAccount(long account) {
 
 		ListIterator<Transaction> txnItr = listTxn.listIterator();
 
@@ -54,38 +55,26 @@ public class TransactionsListDS {
 	}
 
 
-	public static synchronized void postTransaction(Transaction t) {
-		if (t.getFromAccountId()!=t.getToAccountId() && t.getTxnAmount()>0) {
-
-			
-			//Find fromAccount
-			Account fromAcctObj = AccountsDS.findAccount(t.getFromAccountId());
-
-			//Find toAccount
-			Account toAcctObj = AccountsDS.findAccount(t.getToAccountId());
-
-			
-			
-			toAcctObj.setBalance(toAcctObj.getBalance()+t.getTxnAmount());
-			fromAcctObj.setBalance(fromAcctObj.getBalance() - t.getTxnAmount());
-			t.setTxnStatus(TxnStatus.CONFIRMED);
-			t.setConfTime(new Date());
-			t.setLastUpdatedTime(t.getConfTime());
-
-			listTxn.add(t);
-		}
-	}
-
-	public static synchronized void cancelTransaction(Transaction t) {
-
-		t.setTxnStatus(TxnStatus.CANCELLED);
-		t.setLastUpdatedTime(new Date());
+	public synchronized void logTransaction(Transaction t) {
 		listTxn.add(t);
 
 	}
 
 
-	public static List<Transaction> getAllTransactions() {
+	public Transaction findTransaction(String txnId) {
+		int i = 0;
+		while (i < listTxn.size() && listTxn.get(i).getId()!=txnId) {
+			i++;
+		}
+		if (i < listTxn.size())  {
+			return listTxn.get(i);
+		}			
+		return null;
+	}
+
+
+
+	public List<Transaction> getAllTransactions() {
 
 		return listTxn;
 	}
