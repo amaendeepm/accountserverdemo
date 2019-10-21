@@ -1,0 +1,58 @@
+README
+
+
+To run locally
+1. Download the repo and point the parent folder “accountserverdemo” as root for Eclipse(or any other IDE) project
+2. Build it all, and Run the main file “AccountServer”
+
+
+
+A. What is done?
+a. Data Source
+AccountsDS and TransactionsListDS are mocked data source, with former initialised with 3 fixed accounts containing 500 EUR each
+And these are complimented by Finder Services
+
+b. Request Handler
+No frameworks are used here, other than what comes bundled with JDK
+
+c. Transactions
+Each transaction is assumed a lifecycle where it is first created, and then redacted ( either confirmed or cancelled ) as producer consumer model with BlockingQueue
+Transactions of entire system are saved back inside memory object of TransactionsListDS
+
+d. Account
+An account is identified by id, a number, holder name, while also has currency and balance
+Account does not store transactions, but encapsulates. At every request to fetch its transaction it inquires from Transaction master ledger and based on if it was giver (Debit) or recipient (Credit), transaction type is decided and such list is prepared and sent back
+
+e. Execution
+System can be tested at port 8500
+
+f. What more could be done better?
+For returning account specific and transaction specific info at the endpoint currently the string dump ( out of overridden toString() ) is being sent, maybe using a Jackson/Gson kinda framework is better to beautify and return them as JSON’s instead :)
+
+
+B.What can be tested?
+
+a. To find out all Accounts and their holdings
+
+http://localhost:8500/accounts
+
+Possible Outcomes if service is running: Success: 200
+
+b. To find out a specific account by its id including all its transactions
+http://localhost:8500/account/[account-id]
+
+Possible Outcomes if service is running: Success 200, Not Found 404
+
+c. To transfer money from one account to another
+http://localhost:8500/transfer/[from-account-id]/[to-account-id]/[amount]
+
+d. To get list and status of all transactions in system
+http://localhost:8500/ledger
+
+e. Get Status of particular Transaction
+http://localhost:8500/txnstatus/[transaction-id]
+
+
+
+
+
