@@ -46,13 +46,17 @@ Possible Outcomes if service is running: Success 200, Not Found 404
 c. To transfer money from one account to another
 http://localhost:8500/transfer/[from-account-id]/[to-account-id]/[amount]
 
+Possible Outcomes if service is running: Success 201
+
 d. To get list and status of all transactions in system
 http://localhost:8500/ledger
+
+Possible Outcomes if service is running: Success 200
 
 e. Get Status of particular Transaction
 http://localhost:8500/txnstatus/[transaction-id]
 
-
+Possible Outcomes if service is running: Success 200, Not Found 404
 
 
 
