@@ -7,13 +7,14 @@ import test.server.types.datasrc.TransactionsListDS;
 
 public class Account {
 	
-	private String acctId;
+	
+	private long acctId;
 	private String acctNum;
 	private String custName;
 	private String acctCurrency;
-	private long balance;
+	private double balance;
 	
-	public Account(String id, String number, String customer, String currency, long startbalance) {
+	public Account(long id, String number, String customer, String currency, long startbalance) {
 		acctId = id;
 		acctNum = number;
 		custName = customer;
@@ -21,10 +22,10 @@ public class Account {
 		balance = startbalance;
 	}
 	
-	public String getId() {
+	public long getId() {
 		return acctId;
 	}
-	public void setId(String id) {
+	public void setId(long id) {
 		this.acctId = id;
 	}
 	public String getAcctNum() {
@@ -50,10 +51,10 @@ public class Account {
 		return TransactionsListDS.getTransactionsForAccount(this.acctId);
 	}
 	
-	public long getBalance() {
+	public double getBalance() {
 		return balance;
 	}
-	public void setBalance(long balance) {
+	public void setBalance(double balance) {
 		this.balance = balance;
 	}
 	

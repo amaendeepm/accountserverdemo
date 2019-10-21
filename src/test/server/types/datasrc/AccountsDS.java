@@ -26,9 +26,9 @@ public class AccountsDS {
 	private void init() {
 		acctList = new CopyOnWriteArrayList<Account>();
 		
-		Account a = new Account("id0","101","Apple","EUR", 500);
-		Account b = new Account("id1","102","Orange","EUR", 500);
-		Account c = new Account("id2","103","Mango","EUR", 500);
+		Account a = new Account(1001,"ACCT101","Apple","EUR", 500);
+		Account b = new Account(1002,"ACCT102","Orange","EUR", 500);
+		Account c = new Account(1003,"ACCT103","Mango","EUR", 500);
 		
 		acctList.add(a);
 		acctList.add(b);
@@ -36,11 +36,11 @@ public class AccountsDS {
 	}
 	
 	
-	public static Account findAccount(String id) {
+	public static Account findAccount(long id) {
 
 		int i = 0;
 		
-		while (i < acctList.size() && !acctList.get(i).getId().equalsIgnoreCase(id)) {
+		while (i < acctList.size() && acctList.get(i).getId()!=id) {
 			i++;
 		}
 		
@@ -54,7 +54,7 @@ public class AccountsDS {
 	}
 	
 	
-	public static void UpdateAccountBalance(String id, long newBalance) {
+	public static void UpdateAccountBalance(long id, long newBalance) {
 		Account acct = findAccount(id);
 		
 		if (acct!=null) {

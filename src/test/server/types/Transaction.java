@@ -9,10 +9,10 @@ public class Transaction {
 	private final Date initTime;
 	private Date confTime;
 	private Date lastUpdatedTime;
-	private final String fromAccountId;
-	private final String toAccountId;
+	private final long fromAccountId;
+	private final long toAccountId;
 	private TxnStatus txnStatus;
-	private final long txnAmount;
+	private final double txnAmount;
 	private TxnType txnType;
 
 	public enum TxnStatus {
@@ -28,7 +28,7 @@ public class Transaction {
 		//Could be more viz. DEBIT_AUTHORIZATION, AUTO_DEBIT etc.
 	}
 
-	public Transaction(String fromAcct, String toAcct, long amount) {
+	public Transaction(long fromAcct, long toAcct, double amount) {
 		id = getRandomHexString();
 		txnStatus =TxnStatus.INIT;
 		initTime = new Date();
@@ -66,11 +66,11 @@ public class Transaction {
 		this.lastUpdatedTime = lastUpdatedTime;
 	}
 
-	public String getFromAccountId() {
+	public long getFromAccountId() {
 		return fromAccountId;
 	}
 
-	public String getToAccountId() {
+	public long getToAccountId() {
 		return toAccountId;
 	}
 
@@ -87,7 +87,7 @@ public class Transaction {
 		return id;
 	}
 
-	public long getTxnAmount() {
+	public double getTxnAmount() {
 		return txnAmount;
 	}
 	

@@ -1,5 +1,6 @@
 package test.server;
 
+import java.util.Date;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -17,7 +18,7 @@ public class TransactionProcessor {
 	TransactionProcessor(){}
 	
 	
-	protected synchronized String postTransaction(String fromAccount, String toAccount, long amount) {
+	protected synchronized String postTransaction(long fromAccount, long toAccount, double amount) {
 		
 		BlockingQueue<Transaction> txnLifeQueue = new LinkedBlockingDeque<>(10000);
 		ExecutorService executor = Executors.newFixedThreadPool(2);
@@ -56,7 +57,9 @@ public class TransactionProcessor {
 						//TXN END
 						
 					} else {
-						incTxn.setTxnStatus(TxnStatus.CANCELLED);
+						
+						TransactionsListDS.cancelTransaction(incTxn);
+						
 					}
 					
 					Thread.sleep(1000);

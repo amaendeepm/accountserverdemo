@@ -25,7 +25,9 @@ public class AccountingDispatcher {
 		while(tokens.hasMoreTokens()){
 			vars.add(tokens.nextToken());
 		}
-		String from = "", to = "", amount = "", response = "";
+		long from = 0, to = 0;
+		double amount = 0.0;
+		String response = "";
 		System.out.println("Tokens = " + vars.get(0));
 		
 		if (vars.get(0).equalsIgnoreCase("transfer") ) {
@@ -34,9 +36,9 @@ public class AccountingDispatcher {
 				
 			
 			try {
-				from = vars.get(1);
-				to = vars.get(2);
-				amount = vars.get(3);
+				from = Long.parseLong(vars.get(1));
+				to = Long.parseLong(vars.get(2));
+				amount = Double.parseDouble(vars.get(3));
 				} catch(Exception e) {
 				response = "Wrong Params! Correct syntax: /transfer/[from-account-id]/[to-account-id]/[amount] " + e.getMessage();
 				exchange.sendResponseHeaders(409, response.getBytes().length);
@@ -46,7 +48,7 @@ public class AccountingDispatcher {
 			System.out.println("Ready for Transaction");
 			
 			TransactionProcessor tpxr = new TransactionProcessor();
-			String txnID = tpxr.postTransaction(from, to, Long.parseLong(amount));
+			String txnID = tpxr.postTransaction(from, to, amount);
 			response = "Success - " + txnID + " .Check status at <server>/txnstatus/<txn-id>";
 			exchange.sendResponseHeaders(200, response.getBytes().length);
 			} else {
@@ -64,8 +66,8 @@ public class AccountingDispatcher {
 		} else if (vars.get(0).equalsIgnoreCase("account") ) {
 			
 			if ( vars.size() > 1 ) {
-				System.out.println("Find account id="+vars.get(1));
-				Account acct = AccountsDS.findAccount(vars.get(1));
+				System.out.println("Find account id="+Long.parseLong(vars.get(1)));
+				Account acct = AccountsDS.findAccount(Long.parseLong(vars.get(1)));
 				System.out.println("Found " + acct);
 				
 				if(acct!= null) {
