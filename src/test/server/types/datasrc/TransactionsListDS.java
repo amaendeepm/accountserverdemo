@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
-import test.server.types.Account;
 import test.server.types.Transaction;
 
 
@@ -62,13 +61,19 @@ public class TransactionsListDS {
 
 
 	public Transaction findTransaction(String txnId) {
-		int i = 0;
-		while (i < listTxn.size() && listTxn.get(i).getId()!=txnId) {
-			i++;
+		
+		Transaction t;
+		
+		ListIterator<Transaction> txnItr = listTxn.listIterator();
+		
+		while (txnItr.hasNext()) {
+			t = txnItr.next();
+			
+			if (t.getId().equalsIgnoreCase(txnId)) {
+				return t;
+			}
 		}
-		if (i < listTxn.size())  {
-			return listTxn.get(i);
-		}			
+		
 		return null;
 	}
 

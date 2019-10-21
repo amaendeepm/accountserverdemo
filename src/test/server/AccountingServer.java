@@ -21,8 +21,6 @@ public class AccountingServer {
 		server.start();
 	}
 	
-	
-
 
 
 }

@@ -1,9 +1,11 @@
 package test.server.types.datasrc;
 
 import java.util.List;
+import java.util.ListIterator;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import test.server.types.Account;
+import test.server.types.Transaction;
 
 public class AccountsDS {
 	
@@ -37,18 +39,18 @@ public class AccountsDS {
 	
 	
 	public static Account findAccount(long id) {
-
-		int i = 0;
 		
-		while (i < acctList.size() && acctList.get(i).getId()!=id) {
-			i++;
+		Account a;
+		
+		ListIterator<Account> txnAcct = acctList.listIterator();
+		
+		while (txnAcct.hasNext()) {
+			a = txnAcct.next();
+			
+			if (a.getId() == id) {
+				return a;
+			}
 		}
-		
-
-		if (i < acctList.size())  {
-				return acctList.get(i);
-		}			
-		
 		
 		return null;
 	}
